@@ -13,6 +13,6 @@ All must be aligned in the same space (e.g. native or MNI) but needn't be on the
 
 ## Outputs
 
-- Fractional intensity from mean fMRI: mean signal in ROI divided by 10% trimmed mean of gray matter
+- Fractional intensity from mean fMRI: mean signal in ROI divided by 10% trimmed mean of gray matter (Could use mean of in-brain voxels (via spm_antimode) as denominator instead of trimmed mean)
 - SNR: Mean signal in ROI divided by standard deviation of global gray matter signal
 - Something relative to T1? E.g. ratio of fractional intensities
