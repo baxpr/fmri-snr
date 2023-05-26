@@ -15,7 +15,6 @@ while [[ $# -gt 0 ]]; do
         --roi_img)        export roi_img="$2";        shift; shift ;;
         --roi_csv)        export roi_csv="$2";        shift; shift ;;
         --gm_niigz)       export gm_niigz="$2";       shift; shift ;;
-        --wm_niigz)       export wm_niigz="$2";       shift; shift ;;
         --out_dir)        export out_dir="$2";        shift; shift ;;
         --roi_dir)        export roi_dir="$2";        shift; shift ;;
         *) echo "Input ${1} not recognized"; shift ;;
@@ -29,7 +28,6 @@ cd "${out_dir}"
 cp "${meanfmri_niigz}" meanfmri.nii.gz
 cp "${fmri_niigz}" fmri.nii.gz
 cp "${gm_niigz}" gm.nii.gz
-cp "${wm_niigz}" wm.nii.gz
 
 # If external ROI image is supplied (i.e. $roi_img includes a path), copy it,
 # else find the internal ROI image and label
@@ -52,11 +50,11 @@ else
 fi
 
 # Create brain mask and resample to fmri geometry
-fslmaths gm -add wm -thr 0.9 -bin origbrain
+fslmaths gm -thr 0.9 -bin origmask
 flirt -usesqform -applyxfm -interp nearestneighbour \
-    -in origbrain \
+    -in origmask \
     -ref meanfmri \
-    -out brain
+    -out mask
 
 # Resample ROI image to fmri geometry
 flirt -usesqform -applyxfm -interp nearestneighbour \
@@ -64,8 +62,8 @@ flirt -usesqform -applyxfm -interp nearestneighbour \
     -ref meanfmri \
     -out roi
 
-# Median brain value in fMRI
-brainmedian=$(fslstats meanfmri -k brain -p 50)
+# Median value in fMRI within mask
+brainmedian=$(fslstats meanfmri -k mask -p 50)
 
 # Mean ROI signal extraction, mean and time series
 echo Extracting ROI signals
