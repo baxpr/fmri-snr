@@ -63,7 +63,7 @@ flirt -usesqform -applyxfm -interp nearestneighbour \
     -out roi
 
 # Median value in fMRI within mask
-brainmedian=$(fslstats meanfmri -k mask -p 50)
+maskmedian=$(fslstats meanfmri -k mask -p 50)
 
 # Mean ROI signal extraction, mean and time series
 echo Extracting ROI signals
@@ -71,7 +71,7 @@ fslmeants -i meanfmri -o meanroidata.txt --label=roi
 fslmeants -i fmri -o roidata.txt --label=roi
 
 # Compute regional stats
-roi_to_csv.py roi-labels.csv meanroidata.txt roidata.txt "${brainmedian}"
+roi_to_csv.py roi-labels.csv meanroidata.txt roidata.txt "${maskmedian}"
 
 
 # Unzip image files for SPM

@@ -8,7 +8,7 @@ import sys
 roicsv = sys.argv[1]
 meanfsltxt = sys.argv[2]
 fsltxt = sys.argv[3]
-brainmean = sys.argv[4]
+denom = sys.argv[4]
 
 # Output filename
 fslcsv = fsltxt.replace('.txt', '.csv')
@@ -26,7 +26,7 @@ data = pandas.read_csv(
     )
 
 # Rescale by whole brain mean
-data = data.applymap(lambda x: x/float(brainmean))
+data = data.applymap(lambda x: x/float(denom))
 
 # Transpose
 region = list(data.columns)
