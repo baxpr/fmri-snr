@@ -11,12 +11,20 @@ fsltxt = sys.argv[3]
 denom = sys.argv[4]
 
 # Output filename
+meanfslcsv = meanfsltxt.replace('.txt', '.csv')
 fslcsv = fsltxt.replace('.txt', '.csv')
 
 # Read ROI labels
 roiinfo = pandas.read_csv(roicsv)
 
 # Read time series into data frame and add labels
+meandata = pandas.read_csv(
+    meanfsltxt, 
+    delim_whitespace=True, 
+    usecols=roiinfo.Label-1,
+    names=roiinfo.Region,
+    dtype=float,
+    )
 data = pandas.read_csv(
     fsltxt, 
     delim_whitespace=True, 
@@ -24,14 +32,15 @@ data = pandas.read_csv(
     names=roiinfo.Region,
     dtype=float,
     )
-
+    
 # Rescale by whole brain mean
+meandata = meandata.applymap(lambda x: x/float(denom))
 data = data.applymap(lambda x: x/float(denom))
 
 # Transpose
-region = list(data.columns)
-fracint = list(data.iloc[0,:].values)
-data = pandas.DataFrame(zip(region, fracint), columns=['region','fractional_intensity'])
+region = list(meandata.columns)
+fracint = list(meandata.iloc[0,:].values)
+result = pandas.DataFrame(zip(region, fracint), columns=['region','fractional_intensity'])
 
 # Write to csv
-data.to_csv(fslcsv, index=False)
+result.to_csv(fslcsv, index=False)
