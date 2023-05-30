@@ -8,7 +8,7 @@ import sys
 
 roicsv = sys.argv[1]
 meanfsltxt = sys.argv[2]
-denom = sys.argv[4]
+denom = sys.argv[3]
 
 # Output filename
 meanfslcsv = meanfsltxt.replace('.txt', '.csv')
@@ -35,4 +35,4 @@ fracint = list(meandata.iloc[0,:].values)
 result = pandas.DataFrame(zip(region, fracint), columns=['region','fractional_intensity'])
 
 # Write to csv
-result.to_csv(fslcsv, index=False)
+result.to_csv(meanfslcsv, index=False)

@@ -11,7 +11,6 @@ while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
         --meanfmri_niigz) export meanfmri_niigz="$2"; shift; shift ;;
-        --fmri_niigz)     export fmri_niigz="$2";     shift; shift ;;
         --roi_img)        export roi_img="$2";        shift; shift ;;
         --roi_csv)        export roi_csv="$2";        shift; shift ;;
         --gm_niigz)       export gm_niigz="$2";       shift; shift ;;
@@ -26,7 +25,6 @@ cd "${out_dir}"
 
 # Copy input images
 cp "${meanfmri_niigz}" meanfmri.nii.gz
-cp "${fmri_niigz}" fmri.nii.gz
 cp "${gm_niigz}" gm.nii.gz
 
 # If external ROI image is supplied (i.e. $roi_img includes a path), copy it,
@@ -68,10 +66,9 @@ maskmedian=$(fslstats meanfmri -k mask -p 50)
 # Mean ROI signal extraction, mean and time series
 echo Extracting ROI signals
 fslmeants -i meanfmri -o meanroidata.txt --label=roi
-fslmeants -i fmri -o roidata.txt --label=roi
 
 # Compute regional stats
-roi_to_csv.py roi-labels.csv meanroidata.txt roidata.txt "${maskmedian}"
+roi_to_csv.py roi-labels.csv meanroidata.txt "${maskmedian}"
 
 
 # Unzip image files for SPM
