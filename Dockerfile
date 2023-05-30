@@ -5,6 +5,7 @@ FROM baxterprogers/fsl-base:v6.0.5.2
 # Pipeline code
 COPY README.md /opt/fmri-snr/README.md
 COPY src /opt/fmri-snr/src
+COPY rois /opt/fmri-snr/rois
 ENV PATH=/opt/fmri-snr/src:${PATH}
 
 # Entrypoint
