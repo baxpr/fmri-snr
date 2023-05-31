@@ -68,8 +68,5 @@ echo Extracting ROI signals
 fslmeants -i meanfmri -o meanroidata.txt --label=roi
 
 # Compute regional stats
-roi_to_csv.py roi-labels.csv meanroidata.txt "${maskmedian}"
+roi_to_csv.py roi-labels.csv meanroidata.txt "${maskmedian}" "${out_dir}"
 
-
-# Unzip image files for SPM
-#gunzip "${out_dir}"/*.nii.gz

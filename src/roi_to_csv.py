@@ -9,9 +9,11 @@ import sys
 roicsv = sys.argv[1]
 meanfsltxt = sys.argv[2]
 denom = sys.argv[3]
+outdir = sys.argv[4]
 
 # Output filename
-meanfslcsv = meanfsltxt.replace('.txt', '.csv')
+#meanfslcsv = meanfsltxt.replace('.txt', '.csv')
+meanfslcsv = outdir + '/fracint.csv'
 
 # Read ROI labels
 roiinfo = pandas.read_csv(roicsv)
@@ -27,12 +29,13 @@ meandata = pandas.read_csv(
     
 # Rescale by whole brain mean
 meandata = meandata.applymap(lambda x: x/float(denom))
-print(meandata)
+result = meandata
 
-# Transpose
-region = list(meandata.columns)
-fracint = list(meandata.iloc[0,:].values)
-result = pandas.DataFrame(zip(region, fracint), columns=['region','fractional_intensity'])
+# Or transpose
+#region = list(meandata.columns)
+#fracint = list(meandata.iloc[0,:].values)
+#result = pandas.DataFrame(zip(region, fracint), columns=['region','fractional_intensity'])
 
 # Write to csv
+print(result)
 result.to_csv(meanfslcsv, index=False)
